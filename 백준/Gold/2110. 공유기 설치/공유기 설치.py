@@ -6,7 +6,7 @@ for i in range(n):
     graph.append(int(input()))
 graph.sort()
 
-start = 0
+start = 1
 end = graph[-1] - graph[0]
 def binary(graph, start, end):
     while start <= end:
