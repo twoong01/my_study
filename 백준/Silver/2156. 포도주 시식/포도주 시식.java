@@ -1,6 +1,4 @@
 import java.util.Scanner;
-
-
 public class Main {
 	
 	public static void main(String[] args){
@@ -16,7 +14,10 @@ public class Main {
     	dp[1] = lst[1];
     	if (n > 1)
     		dp[2] = lst[1] + lst[2];
-
+    	if (n > 2) {
+    		dp[3] = Math.max(lst[1] + lst[2], lst[2] + lst[0]);
+    		dp[3] = Math.max(dp[3], dp[1]);
+    	}
     	for(int i = 3;i < n + 1;i++) {
     		dp[i] = Math.max(dp[i - 3] + lst[i] + lst[i - 1], dp[i - 2] + lst[i]);
     		dp[i] = Math.max(dp[i], dp[i - 1]);
