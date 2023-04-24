@@ -7,6 +7,8 @@ public class Main {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
+		StringBuilder sb = new StringBuilder();
+		
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken());
 		int x = Integer.parseInt(st.nextToken());
@@ -20,9 +22,10 @@ public class Main {
 		
 		for(int i = 0; i < arr.length; i++) {
 			if(arr[i] < x) {
-				System.out.printf("%d ", arr[i]);
+				sb.append(arr[i]).append(" ");
 			}
 		}
+		System.out.println(sb.toString());
 	}
 
 }
