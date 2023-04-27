@@ -1,79 +1,75 @@
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Scanner;
-
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	
-	private static int[][] Map = new int[25][25];
-	private static boolean[][] visit = new boolean[25][25];
-	private static int dx[] = {-1, 1, 0, 0};
-	private static int dy[] = {0, 0, -1, 1};
-	private static int n;
-	private static int num = 0;
-	private static int[] cnt = new int[25*25];
-	
-	public static void main(String[] args){
-    	Scanner sc = new Scanner(System.in);
-    	
-    	n = sc.nextInt();
-    	
-    	Map = new int[n][n];
-    	
-    	for(int i = 0;i < n; i ++) {
-    		String input = sc.next();
-    		for(int j = 0; j < n; j++) {
-    			Map[i][j] = input.charAt(j) - '0';
-    		}
-    	}
-    	for(int i = 0; i < n; i++) {
-    		for(int j = 0;j < n; j++) {
-    			if(Map[i][j] == 0) continue;
-    			if(visit[i][j]) continue;
-    			num++;
-    			bfs(i, j);
-    		}
-    	}
-    	Arrays.sort(cnt);
-    	System.out.println(num);
-    	
-    	for(int i = 0; i < cnt.length;i++) {
-    		if(cnt[i] == 0) {
-    		}else{System.out.println(cnt[i]);
-    		}
-    	}
-    	
-    	
-	}
-	static void bfs(int x, int y) {
-		Queue<int []> q = new LinkedList<>();
-		q.add(new int[] {x, y});
-		visit[x][y] = true;
-		cnt[num]++;
+	static List<Integer> lst;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		while(!q.isEmpty()) {
-			int curx = q.peek()[0];
-			int cury = q.peek()[1];
-			q.poll();
-			
-			for(int k = 0;k<4;k++) {
-				int nx = curx + dx[k];
-				int ny = cury + dy[k];
-				if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue; 
-				if (Map[nx][ny] != 1) continue;
-				if (visit[nx][ny]) continue;
-				q.add(new int[] {nx, ny});
-				visit[nx][ny] = true;
-				cnt[num]++;
-				
+		
+		int n = Integer.parseInt(br.readLine());
+		
+		int[][] maps = new int[n][n];
+		for(int i = 0; i < n; i ++) {
+			char[] t = br.readLine().toCharArray();
+			for(int j = 0; j < n;j ++) {
+				maps[i][j] = t[j] - '0';
 			}
-			
+		}
+		
+		lst = new ArrayList<>();
+		
+		int[] dx;
+		int[] dy;
+		dx = new int[] {-1, 1, 0, 0};
+		dy = new int[] {0, 0, -1, 1};
+		boolean[][] isvisited = new boolean[n][n];
+		int total_cnt = 0;
+		
+		Queue<Point> q = new LinkedList<Point>();
+		
+		for(int i = 0; i < n;i++) {
+			for(int j = 0; j < n; j++) {
+				if(maps[i][j] == 0) continue;
+				if(isvisited[i][j]) continue;
+				q.add(new Point(i, j));
+				isvisited[i][j] = true;
+				int cnt = 1;
+				while(!q.isEmpty()) {
+					Point p = q.poll();
+					int x = p.x;
+					int y = p.y;
+					for(int k = 0; k < 4;k++) {
+						int nx = x + dx[k];
+						int ny = y + dy[k];
+						if (!(0 <= nx && nx < n && 0 <= ny && ny < n)) continue;
+						if (isvisited[nx][ny]) continue;
+						if (maps[nx][ny] == 0) continue;
+						q.add(new Point(nx, ny));
+						isvisited[nx][ny] = true;
+						cnt ++;
+					}
+				}
+				
+				total_cnt ++;
+				lst.add(cnt);
+			}
+		}
+		
+		Collections.sort(lst);
+		
+		System.out.println(total_cnt);
+		for(int i = 0; i < lst.size(); i++) {
+			System.out.println(lst.get(i));
+		}
+	}
+	static class Point{
+		int x, y;
+		
+		public Point(int x, int y) {
+			this.x = x;
+			this.y = y;
 		}
 	}
 }
