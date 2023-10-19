@@ -1,15 +1,18 @@
-N = int(input())
-graph = []
-for i in range(N):
-    graph.append(list(map(int, input())))
+n = int(input())
+maps = [list(input()) for _ in range(n)]
+
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
 num = []
+
 def dfs(x, y):
-    if x <= -1 or x >= N or y <= -1 or y >= N:
+    if x <= -1 or x >= n or y <= -1 or y >= n:
         return False
-    if graph[x][y] == 1:
+    
+    if maps[x][y] == '1':
         global cnt
         cnt += 1
-        graph[x][y] = 0
+        maps[x][y] = '0'
         dfs(x-1, y)
         dfs(x, y-1)
         dfs(x+1, y)
@@ -18,14 +21,14 @@ def dfs(x, y):
     return False
 
 cnt = 0
-result = 0
-for i in range(N):
-    for j in range(N):
-        if dfs(i, j) == True:
-            num.append(cnt)
-            result += 1
-            cnt = 0
+for i in range(n):
+    for j in range(n):
+        if maps[i][j] != '0':
+            if dfs(i, j):
+                num.append(cnt)
+                cnt = 0
+
 num.sort()
-print(result)
+print(len(num))
 for i in range(len(num)):
     print(num[i])
