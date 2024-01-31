@@ -1,10 +1,10 @@
 def solution(arr):
-    stack = []
-    for i in arr:
-        if len(stack) == 0:
-            stack.append(i)
+    answer = []
+    for i in range(len(arr)):
+        if len(answer) == 0:
+            answer.append (arr[i])
         else:
-            top = stack[-1]
-            if i != top:
-                stack.append(i)
-    return stack
+            top = answer[-1]
+            if top != arr[i]:
+                answer.append(arr[i])
+    return answer
