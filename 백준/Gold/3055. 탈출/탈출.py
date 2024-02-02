@@ -6,7 +6,7 @@ input = sys.stdin.readline
 r, c = map(int, input().split())
 maps = [list(map(str, input().rstrip())) for _ in range(r)]
 
-q = deque()
+pre_q = deque()
 dx = [0, 0, -1, 1]
 dy = [-1, 1, 0, 0]
 ans = []
@@ -15,16 +15,15 @@ visited = [[-1 for _ in range(c)] for _ in range(r)]
 for i in range(r):
     for j in range(c):
         if maps[i][j] == '*':
-            q.append([i, j, 1])
+            pre_q.append([i, j, 1])
+            visited[i][j] = 0
+        elif maps[i][j] == 'S':
+            pre_q.append([i, j, 0])
             visited[i][j] = 0
         elif maps[i][j] == 'D':
             target = [i, j]
 
-for i in range(r):
-    for j in range(c):
-        if maps[i][j] == 'S':
-            q.append([i, j, 0])
-            visited[i][j] = 0
+q = deque(sorted(pre_q, key=lambda x : x[2], reverse=True))
 
 while q:
     x, y, who = q.popleft()
