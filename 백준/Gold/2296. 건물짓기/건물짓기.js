@@ -1,43 +1,29 @@
-const readline = require('readline');
+const fs = require('fs');
+const input = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
+const N = parseInt(input[0]);
+const Buildings = input.slice(1).map((str) => str.split(' ').map(Number));
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+function max_profit(n, buildings) {
+  buildings.sort((a, b) => a[0] - b[0]);
 
-function Info(x, y, val) {
-  this.x = x;
-  this.y = y;
-  this.val = val;
-}
+  let dp = buildings.map(([x, y, c]) => [c, c]);
 
-function Sol(n, v) {
-  let DP = new Array(n).fill(0);
   for (let i = 0; i < n; i++) {
-    DP[i] = v[i].val;
     for (let j = 0; j < i; j++) {
-      if (v[j].y < v[i].y) {
-        DP[i] = Math.max(DP[i], DP[j] + v[i].val);
+      if (buildings[j][1] < buildings[i][1]) {
+        dp[i][0] = Math.max(dp[i][0], dp[j][0] + buildings[i][2]);
+      }
+      if (buildings[j][1] > buildings[i][1]) {
+        dp[i][1] = Math.max(dp[i][1], dp[j][1] + buildings[i][2]);
       }
     }
   }
-  return Math.max(...DP);
+  let answer = Number.MIN_SAFE_INTEGER;
+
+  for (let i = 0; i < dp.length; i++) {
+    answer = Math.max(answer, dp[i][0], dp[i][1]);
+  }
+  return answer;
 }
 
-rl.question('', (nInput) => {
-  const n = parseInt(nInput);
-  let ans = 0;
-  let v = [];
-  rl.on('line', (line) => {
-    const [x, y, val] = line.split(' ').map(Number);
-    v.push(new Info(x, y, val));
-    if (v.length === n) {
-      rl.close();
-      v.sort((a, b) => a.x - b.x);
-      ans = Math.max(ans, Sol(n, v));
-      v.sort((a, b) => b.x - a.x);
-      ans = Math.max(ans, Sol(n, v));
-      console.log(ans);
-    }
-  });
-});
+console.log(max_profit(N, Buildings));
